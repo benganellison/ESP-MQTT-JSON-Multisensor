@@ -273,7 +273,10 @@ void setupmessagesforDiscovery() {
   device_pir_discovery_register_message["name"] = DEVICE_FRIENDLY_NAME " Motion Sensor";
   device_pir_discovery_register_message["device_class"] = "motion";
   device_pir_discovery_register_message["state_topic"] = DEVICE_DEVICE_STATE_TOPIC;
+  device_pir_discovery_register_message["payload_off"] = false;
+  device_pir_discovery_register_message["payload_on"] = true;
   device_pir_discovery_register_message["value_template"] = "{{ value_json.motion }}";
+  
   
   Serial.println("Publishing device_pir_discovery_register_message json object");
   Serial.println(device_pir_discovery_register_message);
@@ -562,7 +565,7 @@ void sendState()
 
   root["brightness"] = brightness;
   root["humidity"] = (String)humValue;
-  root["motion"] = (String)motionStatus;
+  root["motion"] = motionStatus;
   root["ldr"] = (String)LDR;
   root["temperature"] = (String)tempValue;
   root["heatIndex"] = (String)dht.computeHeatIndex(tempValue, humValue, IsFahrenheit);
@@ -646,14 +649,14 @@ void loop()
 
     if (pirValue == LOW && pirStatus != 1)
     {
-      motionStatus = "standby";
+      motionStatus = false;
       updateState = true;
       pirStatus = 1;
     }
 
     else if (pirValue == HIGH && pirStatus != 2)
     {
-      motionStatus = "motion detected";
+      motionStatus = true;
       updateState = true;
       pirStatus = 2;
     }
@@ -683,10 +686,9 @@ void loop()
 
     if (updateState){
       
-      Serial.print("update sensors?: ");
+      // Serial.print("update sensors?: ");
       sendState();
-      
-      Serial.println("done... ");
+      // Serial.println("done... ");
     }
       
   }
@@ -750,7 +752,7 @@ void loop()
     unsigned long now = millis();
     if (now - lastLoop > transitionTime)
     {
-      if (loopCount <= 255)
+      if (loopCount <= 1020)
       {
         lastLoop = now;
 
@@ -802,7 +804,7 @@ int calculateStep(int prevValue, int endValue)
   int step = endValue - prevValue; // What's the overall gap?
   if (step)
   {                     // If its non-zero,
-    step = 255 / step; //   divide by 1020
+    step = 1020 / step; //   divide by 1020
   }
 
   return step;
