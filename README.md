@@ -63,33 +63,3 @@ Of course, you can use a project box, tupperware, a card board box, or skip the 
 I added a second version of my enclosure that moves the DHT22 sensor outside the case, removes the standoff for the LDR sensor, and adds a pocket for the LED. This should reduce most of the high temperatures being reported by the board and the removal of the standoff allows you to use either the TEMT600 sensor or photoresistor module. A dab of hot glue can help hold everything in place until you can snap the case together.
 
 A few people have reported that the floating PIR sensor issue is back. If it happens, wrap the PIR module in electrical tape, then aluminum foil, and then electrical tape again. Using the tape will make sure you don't short anything out with the foil on either the module or other components in the system.
-
-
-
-### Home Assistant Service Examples
-Besides using the card in Home Assistant's user interface, you can also use the Services tool to control the light using the light.turn_on and light.turn_off services. This will let you play with the parameters you can call later in automations or scripts. 
-
-Fade the Light On Over 5 Seconds - light.turn_on
-```
-{"entity_id":"light.sn1_led",
-"brightness":150,
-"color_name":"blue",
-"transition":"5"
-}
-```
-
-Flash The Light - light.turn_on
-```
-{"entity_id":"light.sn1_led",
-"color_name":"green",
-"brightness":255,
-"flash":"short"
-}
-```
-
-Fade the Light Off Over 5 Seconds - light.turn_off
-```
-{"entity_id":"light.sn1_led",
-"transition":"5"
-}
-```
